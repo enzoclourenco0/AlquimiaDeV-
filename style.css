@@ -1,0 +1,234 @@
+/* RESET TOTAL */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+:root {
+    /* Cores padrão */
+    --color-primary: #E3A625; /* Amarelo */
+    --color-secondary: #3D2B1F; /* Marrom */
+    --color-bg-default: #FDF9F3; /* Bege */
+    --text-color: #3D2B1F;
+
+    /* Tema Geleia (Amarelo) */
+    --theme-geleia-primary: #FFC107; /* Amarelo mais vibrante */
+    --theme-geleia-secondary: #795548; /* Marrom suave */
+    --theme-geleia-bg: #FFF9C4; /* Amarelo claro */
+
+    /* Tema Pimenta (Vermelho) */
+    --theme-pimenta-primary: #D32F2F; /* Vermelho escuro */
+    --theme-pimenta-secondary: #FFEBEE; /* Rosa muito claro */
+    --theme-pimenta-bg: #EF9A9A; /* Vermelho claro */
+}
+
+body {
+    font-family: 'Lora', serif;
+    background-color: var(--color-bg-default); /* Cor de fundo inicial */
+    color: var(--text-color);
+    transition: background-color 1.5s ease; /* Transição suave para o fundo */
+}
+
+/* Transições de tema do BODY */
+body.theme-geleia {
+    background-color: var(--theme-geleia-bg);
+    --color-primary: var(--theme-geleia-primary);
+    --color-secondary: var(--theme-geleia-secondary);
+    --text-color: var(--theme-geleia-secondary);
+}
+
+body.theme-pimenta {
+    background-color: var(--theme-pimenta-bg);
+    --color-primary: var(--theme-pimenta-primary);
+    --color-secondary: var(--theme-pimenta-secondary);
+    --text-color: var(--theme-pimenta-primary);
+}
+
+
+/* IMAGENS DE FUNDO VIA SRC */
+.full-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    display: block;
+    z-index: 0;
+    opacity: 0.3; /* Levemente mais opaco para o fundo se destacar um pouco */
+    pointer-events: none;
+    transition: opacity 1.5s ease; /* Transição suave para a opacidade do fundo */
+}
+
+/* HERO */
+.hero {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-color: var(--color-primary); /* Usa a cor primária do tema atual */
+    transition: background-color 1.5s ease;
+}
+
+.hero-content { 
+    z-index: 10; 
+    text-align: center; 
+    color: white; 
+    text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+h1 { 
+    font-family: 'Playfair Display'; 
+    font-size: clamp(3rem, 10vw, 5rem); 
+}
+
+.badge { 
+    background: var(--color-secondary); /* Usa a cor secundária do tema atual */
+    padding: 8px 25px; 
+    border-radius: 50px; 
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    letter-spacing: 2px;
+    font-weight: bold;
+    transition: background-color 1.5s ease;
+}
+
+/* STICKY CONTAINER */
+.sticky-container {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    pointer-events: none;
+    transition: background-color 1.5s ease; /* Para o background do sticky container */
+}
+
+#main-product {
+    max-height: 60vh;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.3));
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* DECORATIVOS FLUTUANTES */
+.decor {
+    position: absolute;
+    border-radius: 50%;
+    width: 20vw;
+    height: 20vw;
+    max-width: 250px;
+    max-height: 250px;
+    object-fit: cover;
+    opacity: 0.6;
+    transition: transform 1.5s ease;
+}
+
+.blur-soft { filter: blur(3px); }
+.blur-medium { filter: blur(6px); }
+.blur-heavy { filter: blur(12px); }
+
+#decor-top-left { top: 5%; left: -2%; animation: float 8s infinite ease-in-out; }
+#decor-bottom-right { bottom: 5%; right: -2%; animation: float 10s infinite ease-in-out reverse; }
+#decor-mid-right { right: 5%; top: 25%; width: 15vw; height: 15vw; animation: float 6s infinite ease-in-out 1s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(8deg); }
+}
+
+/* SECTIONS & CARDS */
+.content-section {
+    position: relative;
+    height: 120vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    padding: 0 10%;
+    overflow: hidden;
+}
+
+.info-card {
+    position: relative;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    padding: clamp(1.5rem, 5vw, 3.5rem);
+    border-radius: 40px;
+    max-width: 420px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(60px);
+    transition: 1s all ease-out;
+    border-left: 8px solid var(--color-primary); /* Borda lateral que muda com o tema */
+}
+
+.info-card.active { opacity: 1; transform: translateY(0); }
+.info-card.right { margin-left: auto; }
+.info-card.center { margin: 0 auto; text-align: center; }
+
+.step { 
+    color: var(--color-primary); /* Usa a cor primária do tema atual */
+    font-weight: bold; 
+    font-size: 0.9rem; 
+    display: block; 
+    margin-bottom: 15px; 
+    letter-spacing: 2px;
+    transition: color 1.5s ease;
+}
+
+/* ESTILOS ESPECÍFICOS DOS SHOWCASE DE PRODUTOS */
+.product-showcase {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.showcase-img {
+    width: 180px; /* Tamanho ajustável da imagem do produto no card */
+    height: 180px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+    margin-bottom: 1.5rem;
+}
+
+/* BOTÕES */
+.buy-btn {
+    background: var(--color-secondary); /* Cor do botão muda com o tema */
+    color: white; 
+    border: none;
+    padding: 20px 50px; 
+    border-radius: 50px; 
+    font-weight: bold;
+    cursor: pointer; 
+    margin-top: 20px; 
+    transition: background-color 1.5s ease;
+}
+
+.buy-btn:hover { 
+    background: var(--color-primary); /* Hover para a cor primária do tema */
+    transform: scale(1.05); 
+}
+
+/* FOOTER */
+.footer { 
+    padding: 60px; 
+    text-align: center; 
+    background: white; 
+    position: relative; 
+    z-index: 100; 
+    color: var(--color-secondary);
+}

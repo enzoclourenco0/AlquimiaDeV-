@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alquimia de Vó | Sabor e Tradição</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* RESET E CONFIGURAÇÕES BÁSICAS */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Lora', serif; 
+            background-color: #fdfaf6; 
+            color: #333; 
+            overflow-x: hidden;
+            line-height: 1;
+        }
+        
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            color: white;
+            z-index: 20;
+            background: #000;
+        }
+
+        #section-geleia { margin-top: -100vh; }
+        #section-geleia .full-bg-img { filter: brightness(0.7) blur(4px); }
+        #section-pimenta .full-bg-img { filter: brightness(0.7) blur(4px); }
+
+        .mobile-product-img {
+            display: none;
+            width: 180px;
+            margin: 0 auto 20px auto;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+
+        /* SEÇÃO DE VÍDEO (DESKTOP) */
+        .video-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            z-index: 10;
+        }
+
+        .video-wrapper {
+            width: 300px;
+            aspect-ratio: 9/16;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            border: 8px solid #333;
+            background: #000;
+            flex-shrink: 0;
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* RESPONSIVIDADE CORRIGIDA - FOCO NO ALINHAMENTO CENTRAL */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; padding: 0 15px; }
+            .sticky-container { display: none !important; }
+            #section-geleia { margin-top: 0; }
+            .mobile-product-img { display: block; width: 120px; }
+            
+            .content-section {
+                display: flex;
+                flex-direction: column;
+                justify-content: center; /* Centraliza verticalmente no container */
+                align-items: center;
+                padding: 60px 20px;
+                height: auto;
+                min-height: 100vh; /* Garante que a seção ocupe a tela toda */
+                text-align: center;
+            }
+
+            .video-container {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                width: 100%;
+            }
+
+            .video-wrapper {
+                width: 70%; 
+                max-width: 250px;
+                height: auto;
+                aspect-ratio: 9/16;
+            }
+
+            .info-card {
+                width: 100%;
+                margin: 0 !important; /* Remove margens que podem deslocar o card */
+                padding: 30px 20px;
+                border-radius: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .info-card h2 { font-size: 1.6rem; }
+            .info-card p { font-size: 1rem; margin-bottom: 20px; }
+        }
+
+        /* IMAGENS DE FUNDO */
+        .full-bg-img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            display: block;
+            filter: brightness(0.6) blur(8px);
+            transition: opacity 1.5s ease-in-out, filter 1.5s ease-in-out;
+            opacity: 0;
+        }
+
+        .hero .full-bg-img { opacity: 1; filter: brightness(0.6) blur(0px); }
+
+        h1 { font-family: 'Playfair Display', serif; font-size: 4rem; margin: 10px 0; line-height: 1.2; }
+        .badge { background: #d4a373; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; text-transform: uppercase; }
+
+        /* CONTAINER DO PRODUTO (STICKY) */
+        .sticky-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .sticky-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        #main-product {
+            width: 380px;
+            z-index: 15;
+            transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            filter: drop-shadow(0 30px 60px rgba(0,0,0,0.4));
+            opacity: 0;
+        }
+
+        .hidden-product { 
+            opacity: 0 !important; 
+            transform: scale(0.5) rotate(10deg) !important; 
+        }
+
+        /* SEÇÕES DE CONTEÚDO */
+        .content-section {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            z-index: 5;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .content-section.active-bg .full-bg-img {
+            opacity: 1;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.94);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 480px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            pointer-events: auto;
+            transition: transform 0.8s ease, opacity 0.8s ease;
+            line-height: 1.5;
+        }
+
+        .info-card.left { margin-right: auto; }
+        .info-card.right { margin-left: auto; }
+        .info-card.center { margin: 0 auto; text-align: center; }
+
+        .step { color: #d4a373; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 12px; font-size: 0.9rem; }
+        h2 { font-family: 'Playfair Display', serif; font-size: 2.4rem; margin-bottom: 15px; }
+        p { margin-bottom: 25px; font-size: 1.1rem; color: #444; }
+
+        .buy-btn {
+            border: none; padding: 15px 35px; border-radius: 50px; font-weight: bold;
+            cursor: pointer; transition: 0.3s; text-transform: uppercase;
+            text-decoration: none; display: inline-block;
+        }
+        .theme-geleia-btn { background: #e07a5f; color: white; }
+        .theme-pimenta-btn { background: #bc4749; color: white; }
+        
+        .theme-whatsapp-btn { background: #25d366; color: white; }
+        .theme-whatsapp-btn:hover { 
+            background: #128c7e; 
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .contact-info { margin-top: 20px; display: block; color: #666; font-size: 0.9rem; font-style: italic; }
+
+        .footer { padding: 30px 20px; text-align: center; background: #d4a373; color: white; position: relative; z-index: 30; }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <img src="fundoFrutas.png" alt="Fundo Hero" class="full-bg-img">
+        <div class="hero-content">
+            <span class="badge">Receita Ancestral</span>
+            <h1>Alquimia de Vó</h1>
+            <p style="color: #fdfaf6;">O segredo que atravessa gerações.</p>
+        </div>
+    </section> 
+
+    <div class="sticky-wrapper">
+        <div class="sticky-container">
+            <img src="imagemGeliaSemFundo.png" alt="Produto" id="main-product">
+        </div>
+
+        <section class="content-section" id="section-geleia">
+            <img src="fundoManga.png" alt="Fundo Geleia" class="full-bg-img">
+            <div class="info-card left">
+                <img src="imagemGeliaSemFundo.png" alt="Geleia de Manga" class="mobile-product-img">
+                <span class="step">Destaque da Vovó</span>
+                <h2>Geleia Artesanal de Manga</h2>
+                <p>Mangas frescas, colhidos no ponto certo de maturação. Uma receita que mantém o sabor puro da fruta.</p>
+                <button class="buy-btn theme-geleia-btn">Garantir meu Pote</button>
+            </div>
+        </section>
+
+        <section class="content-section" id="section-video">
+            <img src="ImagemManga.jpg" alt="Fundo Vídeo" class="full-bg-img">
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <video autoplay muted loop playsinline>
+                        <source src="Transformação_de_Frutas_em_Recipiente.mp4" type="video/mp4">
+                        Seu navegador não suporta vídeos.
+                    </video>
+                </div>
+                <div class="info-card">
+                    <span class="step">Nossa Arte</span>
+                    <h2>O Carinho em cada detalhe</h2>
+                    <p>Veja como transformamos o melhor da natureza no sabor que você ama. Um processo feito com alma.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="section-pimenta">
+            <img src="fundoPimenta.png" alt="Fundo Pimenta" class="full-bg-img">
+            <div class="info-card right">
+                <img src="imagemPimentaSemFundo.png" alt="Molho de Pimenta" class="mobile-product-img">
+                <span class="step">Sabor Intenso</span>
+                <h2>Molho de Pimenta</h2>
+                <p>A combinação perfeita entre o picante e o aroma amadeirado. Criado para elevar o nível de qualquer prato.</p>
+                <button class="buy-btn theme-pimenta-btn">Quero Experimentar</button>
+            </div>
+        </section>
+
+        <section class="content-section" id="section-final">
+            <img src="ImagensTemperos.jpg" alt="Fundo Contato" class="full-bg-img">
+            <div class="info-card center">
+                <span class="step">Fale Conosco</span>
+                <h2>Gostaria de encomendar ou tirar dúvidas?</h2>
+                <p>Estamos prontos para levar a tradição até você. Entre em contato para pedidos especiais.</p>
+                <a href="https://wa.me/5512997368083" target="_blank" class="buy-btn theme-whatsapp-btn">Conversar no WhatsApp</a>
+                <span class="contact-info">contato@alquimiadevo.com.br</span>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>Alquimia de Vó &copy; 2026 - O sabor da tradição em sua mesa.</p>
+    </footer>
+
+    <script>
+        const mainProduct = document.getElementById('main-product');
+        const sections = document.querySelectorAll('.content-section');
+
+        const imgGeleia = "imagemGeliaSemFundo.png";
+        const imgPimenta = "imagemPimentaSemFundo.png"; 
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const windowHeight = window.innerHeight;
+
+            if (scrolled > windowHeight * 0.3) {
+                if(!mainProduct.classList.contains('hidden-product')){
+                    mainProduct.style.opacity = "1";
+                }
+            } else {
+                mainProduct.style.opacity = "0";
+            }
+
+            const translateY = Math.sin(scrolled / 300) * 10;
+            mainProduct.style.marginTop = `${translateY}px`;
+        });
+
+        const options = { threshold: 0.3 };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active-bg');
+
+                    if (entry.target.id === 'section-final' || entry.target.id === 'section-video') {
+                        mainProduct.classList.add('hidden-product');
+                    } else {
+                        mainProduct.classList.remove('hidden-product');
+                    }
+
+                    if (entry.target.id === 'section-pimenta') {
+                        changeImage(imgPimenta);
+                        mainProduct.style.transform = "translateX(-150px) rotate(5deg)"; 
+                    } 
+                    
+                    if (entry.target.id === 'section-geleia') {
+                        changeImage(imgGeleia);
+                        mainProduct.style.transform = "translateX(150px) rotate(-5deg)";
+                    }
+                } else {
+                    entry.target.classList.remove('active-bg');
+                }
+            });
+        }, options);
+
+        function changeImage(newSrc) {
+            if (!mainProduct.src.includes(newSrc)) {
+                mainProduct.style.opacity = "0";
+                setTimeout(() => {
+                    mainProduct.src = newSrc;
+                    if(!mainProduct.classList.contains('hidden-product')) {
+                        mainProduct.style.opacity = "1";
+                    }
+                }, 400);
+            }
+        }
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>
